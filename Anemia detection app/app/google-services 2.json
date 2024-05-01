@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126264910568",
+    "project_id": "anemiadetection-a3ea1",
+    "storage_bucket": "anemiadetection-a3ea1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126264910568:android:91b0ef57b9ce2cdf1cdf5d",
+        "android_client_info": {
+          "package_name": "com.melis.anemia_detection"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7bHK43_OA2lpeHOmMMqc6MuzysCbZk9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
