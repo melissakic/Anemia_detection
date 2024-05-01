@@ -1,22 +1,13 @@
 package com.melis.anemia_detection
 
-import android.content.ContentResolver
-import android.content.Context
-import android.database.Cursor
-import android.graphics.BitmapFactory
-import android.media.ExifInterface
-import android.media.Image
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,12 +26,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.vision.common.InputImage
-import com.melis.anemia_detection.imageParsing.ParsingViewModel
+import com.melis.anemia_detection.parsingRepository.ParsingViewModel
 import com.melis.anemia_detection.ui.theme.AnemiaDetectionTheme
-import java.io.File
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -72,14 +60,16 @@ fun Test() {
 
     val context = LocalContext.current
 
-    val pickImage = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-        uri?.let { imageUri ->
+    val pickImage =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+            uri?.let { imageUri ->
+                viewModel.parseText(context, imageUri, {
+                    recognizedText = it
+                }, {
 
-            viewModel.parse(context,imageUri){
-                recognizedText = it
+                })
             }
         }
-    }
 
     Column(
         modifier = Modifier
