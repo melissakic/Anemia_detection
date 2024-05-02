@@ -22,11 +22,11 @@ class ParsingViewModel {
         ocrEngineViewModel.parse(context, uri, onSuccessAction = { analyzedText ->
             if (analyzedText != null) {
                 onSuccessAction(
-                    ParsingEngine.extractTargetedTextAndValue(
+                    ParsingEngine.extractAnemiaRawData(
                         analyzedText,
                         targetText,
                         tolerance
-                    )
+                    ) ?: ""
                 )
             } else onFailureAction(ErrorTypes.OCR_ERROR)
         }, onFailureAction)
