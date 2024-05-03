@@ -10,7 +10,6 @@ import com.melis.anemia_detection.errorModels.ErrorTypes
 class ParsingViewModel {
     private val ocrEngineViewModel: OCREngineViewModel = OCREngineViewModel()
     private val tolerance: Int = 5
-    private val targetText: List<String> = listOf("MCV", "Hemoglobin", "HGB")
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun parseText(
@@ -22,9 +21,8 @@ class ParsingViewModel {
         ocrEngineViewModel.parse(context, uri, onSuccessAction = { analyzedText ->
             if (analyzedText != null) {
                 onSuccessAction(
-                    ParsingEngine.extractAnemiaRawData(
+                    ParsingEngine.extractAnemiaData(
                         analyzedText,
-                        targetText,
                         tolerance
                     ) ?: ""
                 )
