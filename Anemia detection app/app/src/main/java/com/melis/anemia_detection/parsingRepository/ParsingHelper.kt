@@ -1,6 +1,7 @@
 package com.melis.anemia_detection.parsingRepository
 
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.melis.anemia_detection.anemiaModels.ParameterValues
 import com.melis.anemia_detection.anemiaModels.RefinedValues
 import java.util.Locale
 import java.util.Vector
@@ -23,7 +24,7 @@ sealed class ParsingHelper {
                                 Locale.getDefault()
                             )
                         }) {
-                        
+
                         val targetTop = line.boundingBox?.top ?: 0
                         val targetBottom = line.boundingBox?.bottom ?: 0
 
@@ -83,12 +84,27 @@ sealed class ParsingHelper {
                     )
                 }
 
-                val neededMcvValue = extractedValues.minByOrNull {
+                val neededSingularValue = extractedValues.minByOrNull {
                     it.value
                 }?.key?.text?.extractNumericPart()?.toDouble() ?: 0.0
 
-                onSuccessAction(RefinedValues(value, neededMcvValue))
+                if (value.contains(ParameterValues.HEMOGLOBIN_VAR1.value) || value.contains(
+                        ParameterValues.HEMOGLOBIN_VAR2.value
+                    )
+                ) {
+                    onSuccessAction(
+                        RefinedValues(
+                            value,
+                            modifyHemoglobinValues(neededSingularValue)
+                        )
+                    )
+                } else onSuccessAction(RefinedValues(value, neededSingularValue))
             }
+        }
+
+        private fun modifyHemoglobinValues(hemoglobin: Double): Double {
+            return if (hemoglobin > 20.0) hemoglobin / 10
+            else hemoglobin
         }
 
         private fun String.extractNumericPart(): String? {

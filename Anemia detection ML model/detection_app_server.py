@@ -77,26 +77,31 @@ if __name__ == '__main__':
 
     @app.route('/predict', methods=['POST'])
     def predict():
-        # Get request data
-        data = request.get_json()
+        try:
+        # Get request data as JSON
+            data = request.get_json()
 
         # Extract input values
-        hemoglobin = data['hemoglobin']
-        gender = data['gender']
-        mcv = data['mcv']
+            hemoglobin = data.get('hemoglobin')
+            gender = data.get('gender')
+            mcv = data.get('mcv')
 
         # Call the predict_anemia function to get the prediction
-        prediction = predict_anemia(hemoglobin, gender, mcv)
+            prediction = predict_anemia(hemoglobin, gender, mcv)
 
         # Map the prediction to the corresponding label
-        prediction_label = 'Anemic' if prediction == 1 else 'Non Anemic'
+            prediction_label = 'Anemic' if prediction == 1 else 'Non Anemic'
 
         # Return prediction as JSON response
-        return jsonify({"prediction": prediction_label})
+            return jsonify({"prediction": prediction_label})
+
+        except Exception as e:
+        # Return error message if an exception occurs
+            return jsonify({"error": str(e)})
 
     @app.route('/')
     def home():
         return render_template('index.html')
 
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0',port=8080)
 

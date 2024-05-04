@@ -1,6 +1,7 @@
 package com.melis.anemia_detection.parsingRepository
 
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.melis.anemia_detection.anemiaModels.ParameterValues
 import com.melis.anemia_detection.anemiaModels.RefinedValues
 import java.util.Vector
 
@@ -10,20 +11,28 @@ class ParsingEngine {
         fun extractAnemiaData(
             text: FirebaseVisionText,
             tolerance: Int
-        ): String {
+        ): List<RefinedValues> {
             val hemoglobinLine = Vector<FirebaseVisionText.Line>()
             val mcvLine = Vector<FirebaseVisionText.Line>()
 
-            ParsingHelper.extractRawDataForValues(listOf("MCV"), text, tolerance) {
+            ParsingHelper.extractRawDataForValues(
+                listOf(ParameterValues.MCV.value),
+                text,
+                tolerance
+            ) {
                 mcvLine.add(it)
             }
 
-            ParsingHelper.extractRawDataForValues(listOf("Hemoglobin", "HGB"), text, tolerance) {
+            ParsingHelper.extractRawDataForValues(
+                listOf(
+                    ParameterValues.HEMOGLOBIN_VAR1.value,
+                    ParameterValues.HEMOGLOBIN_VAR2.value
+                ), text, tolerance
+            ) {
                 hemoglobinLine.add(it)
             }
 
-            val result = extractAnemiaRefinedData(mcvLine, hemoglobinLine)
-            return result.joinToString()
+            return extractAnemiaRefinedData(mcvLine, hemoglobinLine)
         }
 
 
@@ -35,11 +44,17 @@ class ParsingEngine {
             var refinedValues: Vector<RefinedValues> = Vector()
 
             val mcvLine: FirebaseVisionText.Line? =
-                ParsingHelper.extractRefinedDataForValues(listOf("mcv"), mcvLines)
+                ParsingHelper.extractRefinedDataForValues(
+                    listOf(ParameterValues.MCV.value),
+                    mcvLines
+                )
 
             val hemoglobinLine: FirebaseVisionText.Line? =
                 ParsingHelper.extractRefinedDataForValues(
-                    listOf("hemoglobin", "hgb"),
+                    listOf(
+                        ParameterValues.HEMOGLOBIN_VAR1.value,
+                        ParameterValues.HEMOGLOBIN_VAR2.value
+                    ),
                     hemoglobinLines
                 )
 
@@ -60,12 +75,16 @@ class ParsingEngine {
 
             val extractedSingularValues = Vector<RefinedValues>()
 
-            ParsingHelper.extractSingularDataForValue("MCV", mcvLine, mcvLines) {
+            ParsingHelper.extractSingularDataForValue(
+                ParameterValues.MCV.value,
+                mcvLine,
+                mcvLines
+            ) {
                 extractedSingularValues.add(it)
             }
 
             ParsingHelper.extractSingularDataForValue(
-                "Hemoglobin",
+                ParameterValues.HEMOGLOBIN_VAR1.value,
                 hemoglobinLine,
                 hemoglobinLines
             ) {

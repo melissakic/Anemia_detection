@@ -1,4 +1,5 @@
 plugins {
+    kotlin("plugin.serialization")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
@@ -51,12 +52,17 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.firebase:firebase-ml-vision:24.0.3")
-    implementation ("com.google.mlkit:text-recognition:16.0.0")
+    implementation("io.ktor:ktor-client-android:1.5.0")
+    implementation("io.ktor:ktor-client-serialization:1.5.0")
+    implementation("io.ktor:ktor-client-logging-jvm:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
+    implementation("com.google.android.gms:play-services-vision:20.1.3")
+    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
+    implementation("com.google.mlkit:text-recognition:16.0.0")
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
